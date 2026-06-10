@@ -57,7 +57,7 @@ export function DashboardLayout({
             <p className="text-xs text-sidebar-foreground/70">Performance Suite</p>
           </div>
         </div>
-        <nav className="flex flex-1 flex-col gap-1 px-3 py-2">
+        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-2">
           {nav.map((item) => {
             const active = pathname === item.to;
             return (
