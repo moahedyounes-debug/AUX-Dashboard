@@ -14,8 +14,11 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as PendingAnalysisRouteImport } from './routes/pending-analysis'
 import { Route as MonthlyTrendsRouteImport } from './routes/monthly-trends'
+import { Route as DeepInsightsRouteImport } from './routes/deep-insights'
 import { Route as DailyOperationsRouteImport } from './routes/daily-operations'
 import { Route as CallCenterRouteImport } from './routes/call-center'
+import { Route as BranchComparisonRouteImport } from './routes/branch-comparison'
+import { Route as AscPerformanceRouteImport } from './routes/asc-performance'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SparePartsRoute = SparePartsRouteImport.update({
@@ -43,6 +46,11 @@ const MonthlyTrendsRoute = MonthlyTrendsRouteImport.update({
   path: '/monthly-trends',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DeepInsightsRoute = DeepInsightsRouteImport.update({
+  id: '/deep-insights',
+  path: '/deep-insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DailyOperationsRoute = DailyOperationsRouteImport.update({
   id: '/daily-operations',
   path: '/daily-operations',
@@ -53,6 +61,16 @@ const CallCenterRoute = CallCenterRouteImport.update({
   path: '/call-center',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BranchComparisonRoute = BranchComparisonRouteImport.update({
+  id: '/branch-comparison',
+  path: '/branch-comparison',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AscPerformanceRoute = AscPerformanceRouteImport.update({
+  id: '/asc-performance',
+  path: '/asc-performance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,8 +79,11 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/asc-performance': typeof AscPerformanceRoute
+  '/branch-comparison': typeof BranchComparisonRoute
   '/call-center': typeof CallCenterRoute
   '/daily-operations': typeof DailyOperationsRoute
+  '/deep-insights': typeof DeepInsightsRoute
   '/monthly-trends': typeof MonthlyTrendsRoute
   '/pending-analysis': typeof PendingAnalysisRoute
   '/shipments': typeof ShipmentsRoute
@@ -71,8 +92,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/asc-performance': typeof AscPerformanceRoute
+  '/branch-comparison': typeof BranchComparisonRoute
   '/call-center': typeof CallCenterRoute
   '/daily-operations': typeof DailyOperationsRoute
+  '/deep-insights': typeof DeepInsightsRoute
   '/monthly-trends': typeof MonthlyTrendsRoute
   '/pending-analysis': typeof PendingAnalysisRoute
   '/shipments': typeof ShipmentsRoute
@@ -82,8 +106,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/asc-performance': typeof AscPerformanceRoute
+  '/branch-comparison': typeof BranchComparisonRoute
   '/call-center': typeof CallCenterRoute
   '/daily-operations': typeof DailyOperationsRoute
+  '/deep-insights': typeof DeepInsightsRoute
   '/monthly-trends': typeof MonthlyTrendsRoute
   '/pending-analysis': typeof PendingAnalysisRoute
   '/shipments': typeof ShipmentsRoute
@@ -94,8 +121,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/asc-performance'
+    | '/branch-comparison'
     | '/call-center'
     | '/daily-operations'
+    | '/deep-insights'
     | '/monthly-trends'
     | '/pending-analysis'
     | '/shipments'
@@ -104,8 +134,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/asc-performance'
+    | '/branch-comparison'
     | '/call-center'
     | '/daily-operations'
+    | '/deep-insights'
     | '/monthly-trends'
     | '/pending-analysis'
     | '/shipments'
@@ -114,8 +147,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/asc-performance'
+    | '/branch-comparison'
     | '/call-center'
     | '/daily-operations'
+    | '/deep-insights'
     | '/monthly-trends'
     | '/pending-analysis'
     | '/shipments'
@@ -125,8 +161,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AscPerformanceRoute: typeof AscPerformanceRoute
+  BranchComparisonRoute: typeof BranchComparisonRoute
   CallCenterRoute: typeof CallCenterRoute
   DailyOperationsRoute: typeof DailyOperationsRoute
+  DeepInsightsRoute: typeof DeepInsightsRoute
   MonthlyTrendsRoute: typeof MonthlyTrendsRoute
   PendingAnalysisRoute: typeof PendingAnalysisRoute
   ShipmentsRoute: typeof ShipmentsRoute
@@ -171,6 +210,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MonthlyTrendsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/deep-insights': {
+      id: '/deep-insights'
+      path: '/deep-insights'
+      fullPath: '/deep-insights'
+      preLoaderRoute: typeof DeepInsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/daily-operations': {
       id: '/daily-operations'
       path: '/daily-operations'
@@ -185,6 +231,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CallCenterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/branch-comparison': {
+      id: '/branch-comparison'
+      path: '/branch-comparison'
+      fullPath: '/branch-comparison'
+      preLoaderRoute: typeof BranchComparisonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/asc-performance': {
+      id: '/asc-performance'
+      path: '/asc-performance'
+      fullPath: '/asc-performance'
+      preLoaderRoute: typeof AscPerformanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -197,8 +257,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AscPerformanceRoute: AscPerformanceRoute,
+  BranchComparisonRoute: BranchComparisonRoute,
   CallCenterRoute: CallCenterRoute,
   DailyOperationsRoute: DailyOperationsRoute,
+  DeepInsightsRoute: DeepInsightsRoute,
   MonthlyTrendsRoute: MonthlyTrendsRoute,
   PendingAnalysisRoute: PendingAnalysisRoute,
   ShipmentsRoute: ShipmentsRoute,
