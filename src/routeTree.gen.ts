@@ -12,13 +12,16 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SparePartsRouteImport } from './routes/spare-parts'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
+import { Route as RejectedReturnedRouteImport } from './routes/rejected-returned'
 import { Route as PendingAnalysisRouteImport } from './routes/pending-analysis'
 import { Route as MonthlyTrendsRouteImport } from './routes/monthly-trends'
+import { Route as ExportCenterRouteImport } from './routes/export-center'
 import { Route as DeepInsightsRouteImport } from './routes/deep-insights'
 import { Route as DailyOperationsRouteImport } from './routes/daily-operations'
 import { Route as CallCenterRouteImport } from './routes/call-center'
 import { Route as BranchComparisonRouteImport } from './routes/branch-comparison'
 import { Route as AscPerformanceRouteImport } from './routes/asc-performance'
+import { Route as ActivityLogRouteImport } from './routes/activity-log'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SparePartsRoute = SparePartsRouteImport.update({
@@ -36,6 +39,11 @@ const ShipmentsRoute = ShipmentsRouteImport.update({
   path: '/shipments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RejectedReturnedRoute = RejectedReturnedRouteImport.update({
+  id: '/rejected-returned',
+  path: '/rejected-returned',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PendingAnalysisRoute = PendingAnalysisRouteImport.update({
   id: '/pending-analysis',
   path: '/pending-analysis',
@@ -44,6 +52,11 @@ const PendingAnalysisRoute = PendingAnalysisRouteImport.update({
 const MonthlyTrendsRoute = MonthlyTrendsRouteImport.update({
   id: '/monthly-trends',
   path: '/monthly-trends',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExportCenterRoute = ExportCenterRouteImport.update({
+  id: '/export-center',
+  path: '/export-center',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DeepInsightsRoute = DeepInsightsRouteImport.update({
@@ -71,6 +84,11 @@ const AscPerformanceRoute = AscPerformanceRouteImport.update({
   path: '/asc-performance',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ActivityLogRoute = ActivityLogRouteImport.update({
+  id: '/activity-log',
+  path: '/activity-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -79,26 +97,32 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activity-log': typeof ActivityLogRoute
   '/asc-performance': typeof AscPerformanceRoute
   '/branch-comparison': typeof BranchComparisonRoute
   '/call-center': typeof CallCenterRoute
   '/daily-operations': typeof DailyOperationsRoute
   '/deep-insights': typeof DeepInsightsRoute
+  '/export-center': typeof ExportCenterRoute
   '/monthly-trends': typeof MonthlyTrendsRoute
   '/pending-analysis': typeof PendingAnalysisRoute
+  '/rejected-returned': typeof RejectedReturnedRoute
   '/shipments': typeof ShipmentsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/spare-parts': typeof SparePartsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activity-log': typeof ActivityLogRoute
   '/asc-performance': typeof AscPerformanceRoute
   '/branch-comparison': typeof BranchComparisonRoute
   '/call-center': typeof CallCenterRoute
   '/daily-operations': typeof DailyOperationsRoute
   '/deep-insights': typeof DeepInsightsRoute
+  '/export-center': typeof ExportCenterRoute
   '/monthly-trends': typeof MonthlyTrendsRoute
   '/pending-analysis': typeof PendingAnalysisRoute
+  '/rejected-returned': typeof RejectedReturnedRoute
   '/shipments': typeof ShipmentsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/spare-parts': typeof SparePartsRoute
@@ -106,13 +130,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/activity-log': typeof ActivityLogRoute
   '/asc-performance': typeof AscPerformanceRoute
   '/branch-comparison': typeof BranchComparisonRoute
   '/call-center': typeof CallCenterRoute
   '/daily-operations': typeof DailyOperationsRoute
   '/deep-insights': typeof DeepInsightsRoute
+  '/export-center': typeof ExportCenterRoute
   '/monthly-trends': typeof MonthlyTrendsRoute
   '/pending-analysis': typeof PendingAnalysisRoute
+  '/rejected-returned': typeof RejectedReturnedRoute
   '/shipments': typeof ShipmentsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/spare-parts': typeof SparePartsRoute
@@ -121,39 +148,48 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/activity-log'
     | '/asc-performance'
     | '/branch-comparison'
     | '/call-center'
     | '/daily-operations'
     | '/deep-insights'
+    | '/export-center'
     | '/monthly-trends'
     | '/pending-analysis'
+    | '/rejected-returned'
     | '/shipments'
     | '/sitemap.xml'
     | '/spare-parts'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/activity-log'
     | '/asc-performance'
     | '/branch-comparison'
     | '/call-center'
     | '/daily-operations'
     | '/deep-insights'
+    | '/export-center'
     | '/monthly-trends'
     | '/pending-analysis'
+    | '/rejected-returned'
     | '/shipments'
     | '/sitemap.xml'
     | '/spare-parts'
   id:
     | '__root__'
     | '/'
+    | '/activity-log'
     | '/asc-performance'
     | '/branch-comparison'
     | '/call-center'
     | '/daily-operations'
     | '/deep-insights'
+    | '/export-center'
     | '/monthly-trends'
     | '/pending-analysis'
+    | '/rejected-returned'
     | '/shipments'
     | '/sitemap.xml'
     | '/spare-parts'
@@ -161,13 +197,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivityLogRoute: typeof ActivityLogRoute
   AscPerformanceRoute: typeof AscPerformanceRoute
   BranchComparisonRoute: typeof BranchComparisonRoute
   CallCenterRoute: typeof CallCenterRoute
   DailyOperationsRoute: typeof DailyOperationsRoute
   DeepInsightsRoute: typeof DeepInsightsRoute
+  ExportCenterRoute: typeof ExportCenterRoute
   MonthlyTrendsRoute: typeof MonthlyTrendsRoute
   PendingAnalysisRoute: typeof PendingAnalysisRoute
+  RejectedReturnedRoute: typeof RejectedReturnedRoute
   ShipmentsRoute: typeof ShipmentsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SparePartsRoute: typeof SparePartsRoute
@@ -196,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShipmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rejected-returned': {
+      id: '/rejected-returned'
+      path: '/rejected-returned'
+      fullPath: '/rejected-returned'
+      preLoaderRoute: typeof RejectedReturnedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pending-analysis': {
       id: '/pending-analysis'
       path: '/pending-analysis'
@@ -208,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/monthly-trends'
       fullPath: '/monthly-trends'
       preLoaderRoute: typeof MonthlyTrendsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/export-center': {
+      id: '/export-center'
+      path: '/export-center'
+      fullPath: '/export-center'
+      preLoaderRoute: typeof ExportCenterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/deep-insights': {
@@ -245,6 +298,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AscPerformanceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/activity-log': {
+      id: '/activity-log'
+      path: '/activity-log'
+      fullPath: '/activity-log'
+      preLoaderRoute: typeof ActivityLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -257,13 +317,16 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivityLogRoute: ActivityLogRoute,
   AscPerformanceRoute: AscPerformanceRoute,
   BranchComparisonRoute: BranchComparisonRoute,
   CallCenterRoute: CallCenterRoute,
   DailyOperationsRoute: DailyOperationsRoute,
   DeepInsightsRoute: DeepInsightsRoute,
+  ExportCenterRoute: ExportCenterRoute,
   MonthlyTrendsRoute: MonthlyTrendsRoute,
   PendingAnalysisRoute: PendingAnalysisRoute,
+  RejectedReturnedRoute: RejectedReturnedRoute,
   ShipmentsRoute: ShipmentsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SparePartsRoute: SparePartsRoute,
