@@ -73,6 +73,33 @@ export const KPI = {
     return Object.entries(m).map(([product, p]) => ({ product, count: p.length })).sort((a, b) => b.count - a.count);
   },
 
+  analyzeDelayReasons(rows: Row[]) {
+    const pending = rows.filter((r) => r._isPending);
+    const C = CONFIG.COLS;
+    const CATS = [
+      { key: "distance", label: "Distance Delay", color: "distance", badge: "#dc2626", badgeBg: "#fee2e2", keywords: [] as string[] },
+      { key: "parts", label: "Spare Parts Delay", color: "parts", badge: "#7c3aed", badgeBg: "#f3f0ff", keywords: ["part", "spare", "replacement", "awaiting part", "no parts", "out of stock", "قطع", "قطعة"] },
+      { key: "customer", label: "Customer Delay", color: "customer", badge: "#d97706", badgeBg: "#fef3c7", keywords: ["customer not available", "postponed", "no answer", "customer unavailable", "customer request", "not available", "reschedule", "عميل", "تأجيل"] },
+      { key: "technical", label: "Service Center Delay", color: "technical", badge: "#003D8F", badgeBg: "#eaf3ff", keywords: ["technician delay", "no technician", "technician unavailable", "no worker", "no technician available", "assignment delay", "فني", "لا يوجد فني"] },
+    ];
+    const res: Record<string, any> = {};
+    CATS.forEach((c) => { res[c.key] = { ...c, tickets: [] as Row[], count: 0, totalAging: 0 }; });
+    res.unspecified = { key: "unspecified", label: "Unspecified Delay", color: "other", badge: "#5a607a", badgeBg: "#f3f5f9", tickets: [] as Row[], count: 0, totalAging: 0 };
+    pending.forEach((r) => {
+      const txt = [r[C.COMPLETION_RESULT] || "", r[C.MAINTENANCE] || "", r[C.RESCHED_SUPP] || "", r[C.RESCHED_REASON] || "", r[C.RESCHEDULING] || ""].join(" ").toLowerCase();
+      let matched = false;
+      if (r._farDistance) { res.distance.tickets.push(r); res.distance.count++; if (r._agingHours) res.distance.totalAging += r._agingHours; matched = true; }
+      else { for (const cat of CATS.slice(1)) { if (cat.keywords.some((k) => txt.includes(k))) { res[cat.key].tickets.push(r); res[cat.key].count++; if (r._agingHours) res[cat.key].totalAging += r._agingHours; matched = true; break; } } }
+      if (!matched) { res.unspecified.tickets.push(r); res.unspecified.count++; if (r._agingHours) res.unspecified.totalAging += r._agingHours; }
+    });
+    return Object.values(res).filter((c: any) => c.count > 0).map((c: any) => {
+      c.avgAging = c.count > 0 ? c.totalAging / c.count : null;
+      c.branches = Object.entries(groupBy(c.tickets, (t: Row) => t._branch)).map(([branch, t]) => ({ branch, count: t.length })).sort((a, b) => b.count - a.count);
+      c.technicians = Object.entries(groupBy(c.tickets, (t: Row) => t[CONFIG.COLS.WORKER] || "(Unassigned)")).map(([tech, t]) => ({ tech, count: t.length })).sort((a, b) => b.count - a.count);
+      return c;
+    }).sort((a: any, b: any) => b.count - a.count);
+  },
+
   byBranch(rows: Row[]) {
     return Object.entries(groupBy(rows, (r) => r._branch)).map(([branch, bRows]) => {
       const done = bRows.filter((r) => !r._isPending && r._serviceHours !== null);
