@@ -6,14 +6,32 @@ import {
   Package,
   Truck,
   Snowflake,
+  TrendingUp,
+  CalendarClock,
+  AlarmClock,
+  GitCompare,
+  Microscope,
+  Building2,
+  Undo2,
+  Download,
+  History,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
-  { to: "/", label: "Service KPIs", icon: LayoutDashboard },
-  { to: "/call-center", label: "Call Center", icon: Headphones },
+  { to: "/", label: "KPI Overview", icon: LayoutDashboard },
+  { to: "/monthly-trends", label: "Monthly Trends", icon: TrendingUp },
+  { to: "/daily-operations", label: "Daily Operations", icon: CalendarClock },
+  { to: "/pending-analysis", label: "Pending Analysis", icon: AlarmClock },
+  { to: "/branch-comparison", label: "Branch Comparison", icon: GitCompare },
+  { to: "/deep-insights", label: "Deep Insights", icon: Microscope },
   { to: "/spare-parts", label: "Spare Parts", icon: Package },
+  { to: "/call-center", label: "Call Center", icon: Headphones },
+  { to: "/asc-performance", label: "ASC Performance", icon: Building2 },
+  { to: "/rejected-returned", label: "Rejected / Returned", icon: Undo2 },
   { to: "/shipments", label: "Shipments", icon: Truck },
+  { to: "/export-center", label: "Export Center", icon: Download },
+  { to: "/activity-log", label: "Activity Log", icon: History },
 ] as const;
 
 export function DashboardLayout({
@@ -39,7 +57,7 @@ export function DashboardLayout({
             <p className="text-xs text-sidebar-foreground/70">Performance Suite</p>
           </div>
         </div>
-        <nav className="flex flex-1 flex-col gap-1 px-3 py-2">
+        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-2">
           {nav.map((item) => {
             const active = pathname === item.to;
             return (

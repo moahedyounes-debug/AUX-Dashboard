@@ -145,3 +145,116 @@ export const returnRecords: {
 export function formatNumber(n: number): string {
   return n.toLocaleString("en-US");
 }
+
+// ---- Daily Operations ----
+export const dailyAging = [
+  { branch: "Riyadh", d0_1: 28, d2_3: 14, d4plus: 6 },
+  { branch: "Jeddah", d0_1: 22, d2_3: 18, d4plus: 9 },
+  { branch: "Dammam", d0_1: 17, d2_3: 11, d4plus: 5 },
+  { branch: "Makkah", d0_1: 13, d2_3: 9, d4plus: 7 },
+  { branch: "Madinah", d0_1: 9, d2_3: 6, d4plus: 4 },
+];
+
+export const technicianLoad = [
+  { technician: "Ahmed M.", assigned: 32, closed: 27 },
+  { technician: "Yousef R.", assigned: 28, closed: 24 },
+  { technician: "Khalid S.", assigned: 25, closed: 19 },
+  { technician: "Faisal N.", assigned: 21, closed: 18 },
+  { technician: "Nasser A.", assigned: 18, closed: 15 },
+];
+
+export const serviceHours = [
+  { hour: "08:00", tickets: 12 },
+  { hour: "10:00", tickets: 28 },
+  { hour: "12:00", tickets: 34 },
+  { hour: "14:00", tickets: 41 },
+  { hour: "16:00", tickets: 26 },
+  { hour: "18:00", tickets: 14 },
+];
+
+// ---- Pending Analysis ----
+export const pendingByReason = [
+  { reason: "Awaiting Part", count: 58, avgDays: 6.2 },
+  { reason: "Customer Schedule", count: 41, avgDays: 3.8 },
+  { reason: "Technician Backlog", count: 33, avgDays: 4.5 },
+  { reason: "Approval Pending", count: 27, avgDays: 5.1 },
+  { reason: "Access Issue", count: 19, avgDays: 7.4 },
+  { reason: "Other", count: 18, avgDays: 2.9 },
+];
+
+export const pendingAging = [
+  { bucket: "0-2 days", count: 64 },
+  { bucket: "3-5 days", count: 58 },
+  { bucket: "6-10 days", count: 41 },
+  { bucket: "11+ days", count: 33 },
+];
+
+// ---- Deep Insights ----
+export const serviceTypePerformance = [
+  { type: "Installation", tickets: 318, rate: 90 },
+  { type: "Repair", tickets: 642, rate: 82 },
+  { type: "Maintenance", tickets: 214, rate: 88 },
+  { type: "Inspection", tickets: 110, rate: 94 },
+];
+
+export const completionResults = [
+  { name: "Resolved", value: 1088 },
+  { name: "Rescheduled", value: 124 },
+  { name: "Rejected", value: 48 },
+  { name: "Escalated", value: 24 },
+];
+
+// ---- ASC Performance ----
+export const ascPerformance = [
+  { asc: "ZAM", tickets: 412, rate48h: 81, rate72h: 93, slaScore: 88 },
+  { asc: "wiFEX", tickets: 338, rate48h: 76, rate72h: 89, slaScore: 82 },
+  { asc: "Classic", tickets: 287, rate48h: 79, rate72h: 91, slaScore: 85 },
+  { asc: "DOZN", tickets: 164, rate48h: 73, rate72h: 86, slaScore: 78 },
+  { asc: "ABL", tickets: 83, rate48h: 70, rate72h: 84, slaScore: 74 },
+];
+
+// ---- Rejected / Returned ----
+export const rejectedKpis = {
+  totalRejected: 48,
+  totalReturned: 172,
+  reworkRate: 6.4,
+  avgReturnDays: 4.8,
+};
+
+export const rejectedRecords: {
+  id: string;
+  ticket: string;
+  branch: string;
+  reason: string;
+  status: "Rejected" | "Returned" | "Rework";
+  date: string;
+}[] = [
+  { id: "RJ-2011", ticket: "TK-88421", branch: "Riyadh", reason: "Customer not satisfied", status: "Rework", date: "2025-06-08" },
+  { id: "RJ-2012", ticket: "TK-88455", branch: "Jeddah", reason: "Wrong part fitted", status: "Returned", date: "2025-06-07" },
+  { id: "RJ-2013", ticket: "TK-88490", branch: "Dammam", reason: "Repeat fault", status: "Rejected", date: "2025-06-06" },
+  { id: "RJ-2014", ticket: "TK-88501", branch: "Makkah", reason: "Incomplete repair", status: "Rework", date: "2025-06-05" },
+  { id: "RJ-2015", ticket: "TK-88533", branch: "Madinah", reason: "Defective replacement", status: "Returned", date: "2025-06-04" },
+];
+
+// ---- Activity Log ----
+export const activityLog: {
+  ts: string;
+  user: string;
+  action: string;
+  page: string;
+}[] = [
+  { ts: "2025-06-10 09:14", user: "moahed.younis", action: "View page", page: "overview" },
+  { ts: "2025-06-10 09:12", user: "sara.a", action: "Export Excel", page: "spare-parts" },
+  { ts: "2025-06-10 09:05", user: "omar.t", action: "Refresh data", page: "call-center" },
+  { ts: "2025-06-10 08:58", user: "moahed.younis", action: "Filter applied", page: "pending" },
+  { ts: "2025-06-10 08:51", user: "lina.f", action: "Login", page: "auth" },
+  { ts: "2025-06-10 08:40", user: "huda.s", action: "View page", page: "branches" },
+];
+
+export const exportDatasets = [
+  { name: "Service Tickets", rows: 1284, format: "XLSX / CSV", source: "Main Dashboard" },
+  { name: "Spare Parts Inventory", rows: 1426, format: "XLSX / CSV", source: "Parts Management" },
+  { name: "Part Returns", rows: 312, format: "XLSX / CSV", source: "Parts Management" },
+  { name: "Call Center KPIs", rows: 988, format: "XLSX / CSV", source: "Call Center KPI" },
+  { name: "Agent Evaluations", rows: 245, format: "XLSX / CSV", source: "Agent Evaluation" },
+];
