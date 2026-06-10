@@ -53,7 +53,7 @@ export function DashboardLayout({
                     : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 )}
               >
-                <item.icon className="size-4.5" />
+                <item.icon className="size-5" />
                 {item.label}
               </Link>
             );

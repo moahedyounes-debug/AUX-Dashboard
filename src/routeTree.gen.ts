@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SparePartsRouteImport } from './routes/spare-parts'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as CallCenterRouteImport } from './routes/call-center'
 import { Route as IndexRouteImport } from './routes/index'
@@ -17,6 +18,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const SparePartsRoute = SparePartsRouteImport.update({
   id: '/spare-parts',
   path: '/spare-parts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShipmentsRoute = ShipmentsRouteImport.update({
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/call-center': typeof CallCenterRoute
   '/shipments': typeof ShipmentsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/spare-parts': typeof SparePartsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/call-center': typeof CallCenterRoute
   '/shipments': typeof ShipmentsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/spare-parts': typeof SparePartsRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,33 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/call-center': typeof CallCenterRoute
   '/shipments': typeof ShipmentsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/spare-parts': typeof SparePartsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/call-center' | '/shipments' | '/spare-parts'
+  fullPaths:
+    | '/'
+    | '/call-center'
+    | '/shipments'
+    | '/sitemap.xml'
+    | '/spare-parts'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/call-center' | '/shipments' | '/spare-parts'
-  id: '__root__' | '/' | '/call-center' | '/shipments' | '/spare-parts'
+  to: '/' | '/call-center' | '/shipments' | '/sitemap.xml' | '/spare-parts'
+  id:
+    | '__root__'
+    | '/'
+    | '/call-center'
+    | '/shipments'
+    | '/sitemap.xml'
+    | '/spare-parts'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CallCenterRoute: typeof CallCenterRoute
   ShipmentsRoute: typeof ShipmentsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SparePartsRoute: typeof SparePartsRoute
 }
 
@@ -76,6 +97,13 @@ declare module '@tanstack/react-router' {
       path: '/spare-parts'
       fullPath: '/spare-parts'
       preLoaderRoute: typeof SparePartsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shipments': {
@@ -106,6 +134,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CallCenterRoute: CallCenterRoute,
   ShipmentsRoute: ShipmentsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SparePartsRoute: SparePartsRoute,
 }
 export const routeTree = rootRouteImport
