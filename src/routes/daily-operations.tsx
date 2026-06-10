@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
 } from "recharts";
-import { CalendarClock, AlertCircle, Users, Send, UserX } from "lucide-react";
+import { Send } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { Loading, ErrorState } from "@/components/dashboard/Loading";
