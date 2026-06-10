@@ -12,6 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SparePartsRouteImport } from './routes/spare-parts'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
+import { Route as PendingAnalysisRouteImport } from './routes/pending-analysis'
+import { Route as MonthlyTrendsRouteImport } from './routes/monthly-trends'
+import { Route as DailyOperationsRouteImport } from './routes/daily-operations'
 import { Route as CallCenterRouteImport } from './routes/call-center'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -30,6 +33,21 @@ const ShipmentsRoute = ShipmentsRouteImport.update({
   path: '/shipments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PendingAnalysisRoute = PendingAnalysisRouteImport.update({
+  id: '/pending-analysis',
+  path: '/pending-analysis',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MonthlyTrendsRoute = MonthlyTrendsRouteImport.update({
+  id: '/monthly-trends',
+  path: '/monthly-trends',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DailyOperationsRoute = DailyOperationsRouteImport.update({
+  id: '/daily-operations',
+  path: '/daily-operations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CallCenterRoute = CallCenterRouteImport.update({
   id: '/call-center',
   path: '/call-center',
@@ -44,6 +62,9 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/call-center': typeof CallCenterRoute
+  '/daily-operations': typeof DailyOperationsRoute
+  '/monthly-trends': typeof MonthlyTrendsRoute
+  '/pending-analysis': typeof PendingAnalysisRoute
   '/shipments': typeof ShipmentsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/spare-parts': typeof SparePartsRoute
@@ -51,6 +72,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/call-center': typeof CallCenterRoute
+  '/daily-operations': typeof DailyOperationsRoute
+  '/monthly-trends': typeof MonthlyTrendsRoute
+  '/pending-analysis': typeof PendingAnalysisRoute
   '/shipments': typeof ShipmentsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/spare-parts': typeof SparePartsRoute
@@ -59,6 +83,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/call-center': typeof CallCenterRoute
+  '/daily-operations': typeof DailyOperationsRoute
+  '/monthly-trends': typeof MonthlyTrendsRoute
+  '/pending-analysis': typeof PendingAnalysisRoute
   '/shipments': typeof ShipmentsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/spare-parts': typeof SparePartsRoute
@@ -68,15 +95,29 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/call-center'
+    | '/daily-operations'
+    | '/monthly-trends'
+    | '/pending-analysis'
     | '/shipments'
     | '/sitemap.xml'
     | '/spare-parts'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/call-center' | '/shipments' | '/sitemap.xml' | '/spare-parts'
+  to:
+    | '/'
+    | '/call-center'
+    | '/daily-operations'
+    | '/monthly-trends'
+    | '/pending-analysis'
+    | '/shipments'
+    | '/sitemap.xml'
+    | '/spare-parts'
   id:
     | '__root__'
     | '/'
     | '/call-center'
+    | '/daily-operations'
+    | '/monthly-trends'
+    | '/pending-analysis'
     | '/shipments'
     | '/sitemap.xml'
     | '/spare-parts'
@@ -85,6 +126,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CallCenterRoute: typeof CallCenterRoute
+  DailyOperationsRoute: typeof DailyOperationsRoute
+  MonthlyTrendsRoute: typeof MonthlyTrendsRoute
+  PendingAnalysisRoute: typeof PendingAnalysisRoute
   ShipmentsRoute: typeof ShipmentsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SparePartsRoute: typeof SparePartsRoute
@@ -113,6 +157,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShipmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pending-analysis': {
+      id: '/pending-analysis'
+      path: '/pending-analysis'
+      fullPath: '/pending-analysis'
+      preLoaderRoute: typeof PendingAnalysisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/monthly-trends': {
+      id: '/monthly-trends'
+      path: '/monthly-trends'
+      fullPath: '/monthly-trends'
+      preLoaderRoute: typeof MonthlyTrendsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/daily-operations': {
+      id: '/daily-operations'
+      path: '/daily-operations'
+      fullPath: '/daily-operations'
+      preLoaderRoute: typeof DailyOperationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/call-center': {
       id: '/call-center'
       path: '/call-center'
@@ -133,6 +198,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CallCenterRoute: CallCenterRoute,
+  DailyOperationsRoute: DailyOperationsRoute,
+  MonthlyTrendsRoute: MonthlyTrendsRoute,
+  PendingAnalysisRoute: PendingAnalysisRoute,
   ShipmentsRoute: ShipmentsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SparePartsRoute: SparePartsRoute,
@@ -140,3 +208,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
