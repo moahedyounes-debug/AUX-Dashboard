@@ -77,7 +77,9 @@ function Overview() {
                   <YAxis stroke="var(--muted-foreground)" fontSize={12} domain={[0, 100]} />
                   <Tooltip formatter={(v: any) => (v == null ? "—" : `${Number(v).toFixed(1)}%`)} />
                   <ReferenceLine y={T.RATE_48H} stroke="var(--muted-foreground)" strokeDasharray="5 5" />
-                  <Line type="monotone" dataKey="rate48h" name="48h Rate" stroke="var(--chart-2)" strokeWidth={2} connectNulls />
+                  <Line type="monotone" dataKey="rate48h" name="48h Rate" stroke="var(--chart-2)" strokeWidth={2} connectNulls>
+                    <LabelList dataKey="rate48h" position="top" fontSize={10} fill="var(--foreground)" formatter={(v: any) => (v == null ? "" : `${Math.round(v)}%`)} />
+                  </Line>
                 </LineChart>
               </ResponsiveContainer>
             </ChartCard>
@@ -90,7 +92,9 @@ function Overview() {
                   <YAxis stroke="var(--muted-foreground)" fontSize={12} domain={[0, 100]} />
                   <Tooltip formatter={(v: any) => (v == null ? "—" : `${Number(v).toFixed(1)}%`)} />
                   <ReferenceLine y={T.RATE_72H} stroke="var(--muted-foreground)" strokeDasharray="5 5" />
-                  <Line type="monotone" dataKey="rate72h" name="72h Rate" stroke="var(--chart-3)" strokeWidth={2} connectNulls />
+                  <Line type="monotone" dataKey="rate72h" name="72h Rate" stroke="var(--chart-3)" strokeWidth={2} connectNulls>
+                    <LabelList dataKey="rate72h" position="top" fontSize={10} fill="var(--foreground)" formatter={(v: any) => (v == null ? "" : `${Math.round(v)}%`)} />
+                  </Line>
                 </LineChart>
               </ResponsiveContainer>
             </ChartCard>
@@ -102,7 +106,9 @@ function Overview() {
                   <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={12} />
                   <YAxis stroke="var(--muted-foreground)" fontSize={12} />
                   <Tooltip />
-                  <Bar dataKey="withReason" name="Rescheduled" fill="var(--chart-4)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="withReason" name="Rescheduled" fill="var(--chart-4)" radius={[4, 4, 0, 0]}>
+                    <LabelList dataKey="withReason" position="top" fontSize={10} fill="var(--foreground)" formatter={(v: any) => (v ? v : "")} />
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </ChartCard>
@@ -115,7 +121,9 @@ function Overview() {
                     <XAxis type="number" stroke="var(--muted-foreground)" fontSize={12} />
                     <YAxis type="category" dataKey="reason" stroke="var(--muted-foreground)" fontSize={10} width={140} interval={0} />
                     <Tooltip />
-                    <Bar dataKey="count" name="Pending" fill="var(--destructive)" radius={[0, 4, 4, 0]} />
+                    <Bar dataKey="count" name="Pending" fill="var(--destructive)" radius={[0, 4, 4, 0]}>
+                      <LabelList dataKey="count" position="right" fontSize={10} fill="var(--foreground)" />
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
