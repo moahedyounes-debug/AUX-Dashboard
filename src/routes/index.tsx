@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { Ticket, Clock, Timer, CheckCircle2, AlertCircle, Gauge, UserX, HelpCircle } from "lucide-react";
 import {
   ResponsiveContainer, LineChart, Line, BarChart, Bar, XAxis, YAxis,
-  CartesianGrid, Tooltip, Legend, ReferenceLine,
+  CartesianGrid, Tooltip, Legend, ReferenceLine, LabelList,
 } from "recharts";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { KpiCard } from "@/components/dashboard/KpiCard";
