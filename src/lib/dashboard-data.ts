@@ -229,7 +229,7 @@ export const rejectedRecords: {
   status: "Rejected" | "Returned" | "Rework";
   date: string;
 }[] = [
-  { id: "RJ-2011", ticket: "TК-88421", branch: "Riyadh", reason: "Customer not satisfied", status: "Rework", date: "2025-06-08" },
+  { id: "RJ-2011", ticket: "TK-88421", branch: "Riyadh", reason: "Customer not satisfied", status: "Rework", date: "2025-06-08" },
   { id: "RJ-2012", ticket: "TK-88455", branch: "Jeddah", reason: "Wrong part fitted", status: "Returned", date: "2025-06-07" },
   { id: "RJ-2013", ticket: "TK-88490", branch: "Dammam", reason: "Repeat fault", status: "Rejected", date: "2025-06-06" },
   { id: "RJ-2014", ticket: "TK-88501", branch: "Makkah", reason: "Incomplete repair", status: "Rework", date: "2025-06-05" },
