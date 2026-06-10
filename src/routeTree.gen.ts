@@ -9,8 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SparePartsRouteImport } from './routes/spare-parts'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ShipmentsRouteImport } from './routes/shipments'
+import { Route as CallCenterRouteImport } from './routes/call-center'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SparePartsRoute = SparePartsRouteImport.update({
+  id: '/spare-parts',
+  path: '/spare-parts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShipmentsRoute = ShipmentsRouteImport.update({
+  id: '/shipments',
+  path: '/shipments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CallCenterRoute = CallCenterRouteImport.update({
+  id: '/call-center',
+  path: '/call-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +43,83 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/call-center': typeof CallCenterRoute
+  '/shipments': typeof ShipmentsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/spare-parts': typeof SparePartsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/call-center': typeof CallCenterRoute
+  '/shipments': typeof ShipmentsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/spare-parts': typeof SparePartsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/call-center': typeof CallCenterRoute
+  '/shipments': typeof ShipmentsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/spare-parts': typeof SparePartsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/call-center'
+    | '/shipments'
+    | '/sitemap.xml'
+    | '/spare-parts'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/call-center' | '/shipments' | '/sitemap.xml' | '/spare-parts'
+  id:
+    | '__root__'
+    | '/'
+    | '/call-center'
+    | '/shipments'
+    | '/sitemap.xml'
+    | '/spare-parts'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CallCenterRoute: typeof CallCenterRoute
+  ShipmentsRoute: typeof ShipmentsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SparePartsRoute: typeof SparePartsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/spare-parts': {
+      id: '/spare-parts'
+      path: '/spare-parts'
+      fullPath: '/spare-parts'
+      preLoaderRoute: typeof SparePartsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shipments': {
+      id: '/shipments'
+      path: '/shipments'
+      fullPath: '/shipments'
+      preLoaderRoute: typeof ShipmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/call-center': {
+      id: '/call-center'
+      path: '/call-center'
+      fullPath: '/call-center'
+      preLoaderRoute: typeof CallCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +132,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CallCenterRoute: CallCenterRoute,
+  ShipmentsRoute: ShipmentsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SparePartsRoute: SparePartsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
