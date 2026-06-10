@@ -1,110 +1,126 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
-import { Ticket, Clock, Timer, CheckCircle2, AlertCircle, Gauge } from "lucide-react";
+import { useMemo } from "react";
+import { Ticket, Clock, Timer, CheckCircle2, AlertCircle, Gauge, UserX, HelpCircle } from "lucide-react";
 import {
   ResponsiveContainer, LineChart, Line, BarChart, Bar, XAxis, YAxis,
-  CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell,
+  CartesianGrid, Tooltip, Legend, ReferenceLine,
 } from "recharts";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { ChartCard } from "@/components/dashboard/ChartCard";
 import { Loading, ErrorState } from "@/components/dashboard/Loading";
-import { getServiceKpis } from "@/lib/dashboard.functions";
+import { useTickets } from "@/lib/aux/useTickets";
+import { KPI } from "@/lib/aux/kpis";
+import { CONFIG } from "@/lib/aux/config";
+import { fmt, fmtPct } from "@/lib/aux/data";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Service KPIs — AUX ASC Dashboard" },
-      { name: "description", content: "Live service ticket performance, repair-rate trends and branch comparison for AUX authorized service centers." },
-      { property: "og:title", content: "Service KPIs — AUX ASC Dashboard" },
+      { title: "KPI Overview — AUX ASC Dashboard" },
+      { name: "description", content: "Live service ticket performance, repair-rate trends and pending analysis for AUX authorized service centers." },
+      { property: "og:title", content: "KPI Overview — AUX ASC Dashboard" },
       { property: "og:description", content: "Live service ticket performance and repair-rate analytics." },
     ],
   }),
   component: Overview,
 });
 
-const PIE_COLORS = ["var(--chart-2)", "var(--chart-1)", "var(--chart-4)", "var(--chart-3)", "var(--chart-5)"];
-const fmt = (n: number) => n.toLocaleString("en-US");
-
 function Overview() {
-  const fn = useServerFn(getServiceKpis);
-  const { data, isLoading, error } = useQuery({ queryKey: ["service-kpis"], queryFn: () => fn() });
+  const { data, isLoading, error } = useTickets();
+  const rows = data?.raw ?? [];
+
+  const k = useMemo(() => {
+    if (!rows.length) return null;
+    return {
+      total: rows.length,
+      pendingRate: KPI.pendingRate(rows),
+      rate48h: KPI.rate48h(rows),
+      rate72h: KPI.rate72h(rows),
+      completed: KPI.completed(rows).length,
+      pending: KPI.pending(rows).length,
+      pendingNoReason: KPI.pendingNoReason(rows).length,
+      unassigned: KPI.unassignedCount(rows),
+    };
+  }, [rows]);
+
+  const monthly = useMemo(() => (rows.length ? KPI.byMonth(rows) : []), [rows]);
+  const byReason = useMemo(() => (rows.length ? KPI.pendingByReason(rows).slice(0, 12) : []), [rows]);
+
+  const T = CONFIG.TARGETS;
 
   return (
-    <DashboardLayout title="Service Ticket KPIs" subtitle="Live data · repair performance across all branches">
+    <DashboardLayout title="KPI Overview" subtitle="Live data · repair performance across all branches">
       {isLoading ? (
         <Loading />
-      ) : error || !data ? (
+      ) : error || !k ? (
         <ErrorState message={(error as Error)?.message ?? "No data"} />
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
-            <KpiCard label="Total Tickets" value={fmt(data.kpis.total)} icon={Ticket} tone="primary" hint="All services" />
-            <KpiCard label="Pending Rate" value={`${data.kpis.pendingRate}%`} icon={Gauge} tone="warning" />
-            <KpiCard label="48h Repair Rate" value={`${data.kpis.rate48h}%`} icon={Timer} tone="accent" hint="Target 80%" />
-            <KpiCard label="72h Repair Rate" value={`${data.kpis.rate72h}%`} icon={Clock} tone="success" hint="Target 90%" />
-            <KpiCard label="Completed" value={fmt(data.kpis.completed)} icon={CheckCircle2} tone="success" />
-            <KpiCard label="Pending" value={fmt(data.kpis.pending)} icon={AlertCircle} tone="destructive" />
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 xl:grid-cols-8">
+            <KpiCard label="Total Tickets" value={fmt(k.total)} icon={Ticket} tone="primary" hint="All services" />
+            <KpiCard label="Pending Rate" value={fmtPct(k.pendingRate)} icon={Gauge} tone="warning" hint={`Target ≤ ${T.PENDING_RATE}%`} />
+            <KpiCard label="48H Repair Rate" value={fmtPct(k.rate48h)} icon={Timer} tone="accent" hint={`Target ${T.RATE_48H}%`} />
+            <KpiCard label="72H Repair Rate" value={fmtPct(k.rate72h)} icon={Clock} tone="success" hint={`Target ${T.RATE_72H}%`} />
+            <KpiCard label="Completed" value={fmt(k.completed)} icon={CheckCircle2} tone="success" />
+            <KpiCard label="Pending" value={fmt(k.pending)} icon={AlertCircle} tone="destructive" />
+            <KpiCard label="Pending No Reason" value={fmt(k.pendingNoReason)} icon={HelpCircle} tone="warning" />
+            <KpiCard label="No Worker Assigned" value={fmt(k.unassigned)} icon={UserX} tone="destructive" />
           </div>
 
           <div className="mt-5 grid gap-4 lg:grid-cols-2">
-            <ChartCard title="Monthly Repair Rate" subtitle="48h & 72h rates vs targets">
+            <ChartCard title="48h Rate — Monthly" subtitle={`Repair rate within 48h vs ${T.RATE_48H}% target`}>
               <ResponsiveContainer width="100%" height={280}>
-                <LineChart data={data.monthlyRepairRate}>
+                <LineChart data={monthly}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                  <XAxis dataKey="month" stroke="var(--muted-foreground)" fontSize={12} />
+                  <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={12} />
                   <YAxis stroke="var(--muted-foreground)" fontSize={12} domain={[0, 100]} />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="rate48h" name="48h Rate" stroke="var(--chart-2)" strokeWidth={2} />
-                  <Line type="monotone" dataKey="rate72h" name="72h Rate" stroke="var(--chart-3)" strokeWidth={2} />
-                  <Line type="monotone" dataKey="target48" name="48h Target" stroke="var(--muted-foreground)" strokeDasharray="5 5" dot={false} />
+                  <Tooltip formatter={(v: any) => (v == null ? "—" : `${Number(v).toFixed(1)}%`)} />
+                  <ReferenceLine y={T.RATE_48H} stroke="var(--muted-foreground)" strokeDasharray="5 5" />
+                  <Line type="monotone" dataKey="rate48h" name="48h Rate" stroke="var(--chart-2)" strokeWidth={2} connectNulls />
                 </LineChart>
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="Performance by Branch" subtitle="Completed vs pending tickets">
+            <ChartCard title="72h Rate — Monthly" subtitle={`Repair rate within 72h vs ${T.RATE_72H}% target`}>
               <ResponsiveContainer width="100%" height={280}>
-                <BarChart data={data.branchPerformance}>
+                <LineChart data={monthly}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                  <XAxis dataKey="branch" stroke="var(--muted-foreground)" fontSize={10} interval={0} angle={-15} textAnchor="end" height={60} />
+                  <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={12} />
+                  <YAxis stroke="var(--muted-foreground)" fontSize={12} domain={[0, 100]} />
+                  <Tooltip formatter={(v: any) => (v == null ? "—" : `${Number(v).toFixed(1)}%`)} />
+                  <ReferenceLine y={T.RATE_72H} stroke="var(--muted-foreground)" strokeDasharray="5 5" />
+                  <Line type="monotone" dataKey="rate72h" name="72h Rate" stroke="var(--chart-3)" strokeWidth={2} connectNulls />
+                </LineChart>
+              </ResponsiveContainer>
+            </ChartCard>
+
+            <ChartCard title="Rescheduled Tickets — Monthly" subtitle="Tickets with a reschedule reason per month">
+              <ResponsiveContainer width="100%" height={280}>
+                <BarChart data={monthly}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={12} />
                   <YAxis stroke="var(--muted-foreground)" fontSize={12} />
                   <Tooltip />
-                  <Legend />
-                  <Bar dataKey="completed" name="Completed" fill="var(--chart-3)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="pending" name="Pending" fill="var(--chart-2)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="withReason" name="Rescheduled" fill="var(--chart-4)" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </ChartCard>
 
-            <ChartCard title="Rescheduled Tickets" subtitle="Breakdown by reason">
-              {data.rescheduledReasons.length ? (
+            <ChartCard title="Pending by Reschedule Reason" subtitle="Top reasons across pending tickets">
+              {byReason.length ? (
                 <ResponsiveContainer width="100%" height={280}>
-                  <PieChart>
-                    <Pie data={data.rescheduledReasons} dataKey="count" nameKey="reason" cx="50%" cy="50%" outerRadius={95} label>
-                      {data.rescheduledReasons.map((_, i) => (<Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />))}
-                    </Pie>
+                  <BarChart data={byReason} layout="vertical" margin={{ left: 8 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
+                    <XAxis type="number" stroke="var(--muted-foreground)" fontSize={12} />
+                    <YAxis type="category" dataKey="reason" stroke="var(--muted-foreground)" fontSize={10} width={140} interval={0} />
                     <Tooltip />
-                  </PieChart>
+                    <Bar dataKey="count" name="Pending" fill="var(--destructive)" radius={[0, 4, 4, 0]} />
+                  </BarChart>
                 </ResponsiveContainer>
-              ) : (<p className="py-12 text-center text-sm text-muted-foreground">No rescheduled tickets.</p>)}
-            </ChartCard>
-
-            <ChartCard title="Product Line Performance" subtitle="Completion rate by line">
-              <div className="space-y-3">
-                {data.productLinePerformance.map((p) => (
-                  <div key={p.line}>
-                    <div className="mb-1 flex items-center justify-between text-xs">
-                      <span className="truncate font-medium text-card-foreground">{p.line}</span>
-                      <span className="shrink-0 text-muted-foreground">{p.tickets} · {p.rate}%</span>
-                    </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-secondary">
-                      <div className="h-full rounded-full bg-primary" style={{ width: `${p.rate}%` }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
+              ) : (
+                <p className="py-12 text-center text-sm text-muted-foreground">No pending tickets.</p>
+              )}
             </ChartCard>
           </div>
         </>
